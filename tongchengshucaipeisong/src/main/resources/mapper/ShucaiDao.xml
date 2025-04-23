@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ShucaiDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.shucai_name as shucaiName
+        ,a.shucai_uuid_number as shucaiUuidNumber
+        ,a.shucai_photo as shucaiPhoto
+        ,a.shucai_types as shucaiTypes
+        ,a.shucai_kucun_number as shucaiKucunNumber
+        ,a.shucai_price as shucaiPrice
+        ,a.shucai_old_money as shucaiOldMoney
+        ,a.shucai_new_money as shucaiNewMoney
+        ,a.shucai_clicknum as shucaiClicknum
+        ,a.shucai_content as shucaiContent
+        ,a.shangxia_types as shangxiaTypes
+        ,a.shucai_delete as shucaiDelete
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.ShucaiView" >
+        SELECT
+        <include refid="Base_Column_List" />
+
+--         级联表的字段
+
+        FROM shucai  a
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.shucaiName != '' and params.shucaiName != null and params.shucaiName != 'null' ">
+                and a.shucai_name like CONCAT('%',#{params.shucaiName},'%')
+            </if>
+            <if test=" params.shucaiUuidNumber != '' and params.shucaiUuidNumber != null and params.shucaiUuidNumber != 'null' ">
+                and a.shucai_uuid_number like CONCAT('%',#{params.shucaiUuidNumber},'%')
+            </if>
+            <if test="params.shucaiTypes != null and params.shucaiTypes != ''">
+                and a.shucai_types = #{params.shucaiTypes}
+            </if>
+            <if test="params.shucaiKucunNumberStart != null and params.shucaiKucunNumberStart != ''">
+                <![CDATA[  and a.shucai_kucun_number >= #{params.shucaiKucunNumberStart}   ]]>
+            </if>
+            <if test="params.shucaiKucunNumberEnd != null and params.shucaiKucunNumberEnd != ''">
+                <![CDATA[  and a.shucai_kucun_number <= #{params.shucaiKucunNumberEnd}   ]]>
+            </if>
+             <if test="params.shucaiKucunNumber != null and params.shucaiKucunNumber != ''">
+                and a.shucai_kucun_number = #{params.shucaiKucunNumber}
+             </if>
+            <if test="params.shucaiPriceStart != null and params.shucaiPriceStart != ''">
+                <![CDATA[  and a.shucai_price >= #{params.shucaiPriceStart}   ]]>
+            </if>
+            <if test="params.shucaiPriceEnd != null and params.shucaiPriceEnd != ''">
+                <![CDATA[  and a.shucai_price <= #{params.shucaiPriceEnd}   ]]>
+            </if>
+             <if test="params.shucaiPrice != null and params.shucaiPrice != ''">
+                and a.shucai_price = #{params.shucaiPrice}
+             </if>
+            <if test="params.shucaiOldMoneyStart != null ">
+                <![CDATA[  and a.shucai_old_money >= #{params.shucaiOldMoneyStart}   ]]>
+            </if>
+            <if test="params.shucaiOldMoneyEnd != null ">
+                <![CDATA[  and a.shucai_old_money <= #{params.shucaiOldMoneyEnd}   ]]>
+            </if>
+            <if test="params.shucaiNewMoneyStart != null ">
+                <![CDATA[  and a.shucai_new_money >= #{params.shucaiNewMoneyStart}   ]]>
+            </if>
+            <if test="params.shucaiNewMoneyEnd != null ">
+                <![CDATA[  and a.shucai_new_money <= #{params.shucaiNewMoneyEnd}   ]]>
+            </if>
+            <if test="params.shucaiClicknumStart != null and params.shucaiClicknumStart != ''">
+                <![CDATA[  and a.shucai_clicknum >= #{params.shucaiClicknumStart}   ]]>
+            </if>
+            <if test="params.shucaiClicknumEnd != null and params.shucaiClicknumEnd != ''">
+                <![CDATA[  and a.shucai_clicknum <= #{params.shucaiClicknumEnd}   ]]>
+            </if>
+             <if test="params.shucaiClicknum != null and params.shucaiClicknum != ''">
+                and a.shucai_clicknum = #{params.shucaiClicknum}
+             </if>
+            <if test=" params.shucaiContent != '' and params.shucaiContent != null and params.shucaiContent != 'null' ">
+                and a.shucai_content like CONCAT('%',#{params.shucaiContent},'%')
+            </if>
+            <if test="params.shangxiaTypes != null and params.shangxiaTypes != ''">
+                and a.shangxia_types = #{params.shangxiaTypes}
+            </if>
+            <if test="params.shucaiDeleteStart != null and params.shucaiDeleteStart != ''">
+                <![CDATA[  and a.shucai_delete >= #{params.shucaiDeleteStart}   ]]>
+            </if>
+            <if test="params.shucaiDeleteEnd != null and params.shucaiDeleteEnd != ''">
+                <![CDATA[  and a.shucai_delete <= #{params.shucaiDeleteEnd}   ]]>
+            </if>
+             <if test="params.shucaiDelete != null and params.shucaiDelete != ''">
+                and a.shucai_delete = #{params.shucaiDelete}
+             </if>
+
+        </where>
+
+        order by a.${params.orderBy} desc 
+    </select>
+
+</mapper>
